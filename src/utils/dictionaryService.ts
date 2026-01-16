@@ -38,10 +38,13 @@ export const fetchWordDefinition = async (term: string): Promise<Partial<Word> |
             console.warn('Translation failed', e);
         }
 
+        const audioUrl = entry.phonetics.find(p => p.audio && p.audio.length > 0)?.audio || '';
+
         return {
             definition: firstDef?.definition || 'No definition found',
             example: firstDef?.example || '',
             phonetic: entry.phonetic || entry.phonetics.find(p => p.text)?.text,
+            audio: audioUrl,
             spanishTranslation
         };
     } catch (error) {

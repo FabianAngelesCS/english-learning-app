@@ -31,7 +31,25 @@ export const Flashcard: React.FC<FlashcardProps> = ({ word, onRate, isLoading })
                 <div className="absolute w-full h-full backface-hidden bg-white dark:bg-gray-800 rounded-3xl shadow-2xl flex flex-col items-center justify-center p-8 border border-gray-100 dark:border-gray-700">
                     <span className="text-sm uppercase tracking-[0.2em] text-gray-400 mb-4 font-semibold">Word</span>
                     <h2 className="text-5xl font-bold text-gray-800 dark:text-white mb-2">{word.term}</h2>
-                    {word.phonetic && <p className="text-xl text-indigo-500 font-mono mb-8">{word.phonetic}</p>}
+                    <div className="flex items-center gap-3 mb-8">
+                        {word.phonetic && <p className="text-xl text-indigo-500 font-mono">{word.phonetic}</p>}
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                if (word.audio) {
+                                    new Audio(word.audio).play();
+                                } else {
+                                    const utterance = new SpeechSynthesisUtterance(word.term);
+                                    utterance.lang = 'en-US';
+                                    window.speechSynthesis.speak(utterance);
+                                }
+                            }}
+                            className="p-2 bg-indigo-100 hover:bg-indigo-200 text-indigo-600 rounded-full transition-colors"
+                            title="Listen pronunciation"
+                        >
+                            🔊
+                        </button>
+                    </div>
 
                     <div className="w-full grid grid-cols-2 gap-4 mt-auto mb-4" onClick={(e) => e.stopPropagation()}>
                         <button
@@ -71,11 +89,6 @@ export const Flashcard: React.FC<FlashcardProps> = ({ word, onRate, isLoading })
                             <p className="text-lg leading-relaxed font-medium px-4 opacity-90">{word.definition}</p>
                         )}
 
-                        {/* Secondary Info (English Definition) */}
-                        <div className="bg-black/20 rounded-xl p-4 w-full text-sm backdrop-blur-sm mt-2">
-                            <p className="opacity-70 mb-1 text-xs uppercase font-semibold">In English:</p>
-                            <p className="italic leading-relaxed opacity-90">"{word.definition}"</p>
-                        </div>
 
                         {word.example && (
                             <div className="mt-2 text-xs opacity-75">

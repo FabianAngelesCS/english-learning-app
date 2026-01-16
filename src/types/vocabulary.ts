@@ -4,6 +4,7 @@ export interface Word {
     definition: string;
     example: string;
     phonetic?: string;
+    audio?: string;
     spanishTranslation?: string; // Optional Spanish hint
     level?: 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
     tags?: string[];
